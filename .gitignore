@@ -1,0 +1,10 @@
+.idea
+.idea_modules
+idea.bat
+out
+target
+*.iml
+atlassian-ide-plugin.xml
+
+
+
