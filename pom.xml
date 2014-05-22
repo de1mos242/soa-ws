@@ -19,8 +19,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <slf4j.version>1.7.5</slf4j.version>
-        <!--<masterj.resources>${MASTERJ_ROOT2}/resources</masterj.resources>-->
+        <slf4j.version>1.7.7</slf4j.version>
+        <root.resources>${SOA_WS2_ROOT}/resources</root.resources>
     </properties>
 
     <build>
@@ -38,7 +38,7 @@
 
         <resources>
             <resource>
-                <directory>${masterj.resources}</directory>
+                <directory>${root.resources}</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>log4j.xml</include>
