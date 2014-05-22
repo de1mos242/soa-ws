@@ -23,6 +23,7 @@
         <!--<masterj.resources>${MASTERJ_ROOT2}/resources</masterj.resources>-->
     </properties>
 
+
     <build>
         <plugins>
             <plugin>
