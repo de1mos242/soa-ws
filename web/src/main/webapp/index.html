@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Mail Service</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+</head>
+<body>
+<header>Mail Service</header>
+<section>
+    <table>
+        <tr>
+            <td>
+                <form id="mail" method="post" action="sendMail" enctype="application/x-www-form-urlencoded">
+                    <dl>
+                        <dt>To:</dt>
+                        <dd><input type="text" name="to" size=30></dd>
+                    </dl>
+                    <dl>
+                        <dt>Cc:</dt>
+                        <dd><input type="text" name="cc" size=30></dd>
+                    </dl>
+                    <dl>
+                        <dt>Subject:</dt>
+                        <dd><input type="text" name="subject" size=53></dd>
+                    </dl>
+                    <dl>
+                        <dt>Body:</dt>
+                        <dd><textarea type="text" name="body" cols="40" rows="10"></textarea></dd>
+                    </dl>
+                    <button type="submit">Send Mail</button>
+                </form>
+            </td>
+            <td>
+                <div id="error"></div>
+            </td>
+        </tr>
+    </table>
+    <p>
+</section>
+</body>
+</html>
