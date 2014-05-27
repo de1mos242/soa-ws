@@ -93,19 +93,27 @@ public class JaxbParser {
     // Validation
     private static final SchemaFactory SCHEMA_FACTORY = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-    public static synchronized Schema getSchemaFromString(String xsd) throws SAXException {
-        return SCHEMA_FACTORY.newSchema(getSource(xsd));
+    public static synchronized Schema getSchemaFromString(String xsd) {
+        try {
+            return SCHEMA_FACTORY.newSchema(getSource(xsd));
+        } catch (SAXException e) {
+            throw LOGGER.getIllegalArgumentException("Schema is invalid", e);
+        }
     }
 
-    public static synchronized Schema getSchemaFromUrl(URL url) throws SAXException {
-        return SCHEMA_FACTORY.newSchema(url);
+    public static synchronized Schema getSchemaFromUrl(URL url) {
+        try {
+            return SCHEMA_FACTORY.newSchema(url);
+        } catch (SAXException e) {
+            throw LOGGER.getIllegalArgumentException("Schema " + url + " is invalid", e);
+        }
     }
 
     public static Source getSource(String data) {
         return new StreamSource(new StringReader(data));
     }
 
-    public void setSchema(String filePath) throws SAXException {
+    public void setSchema(String filePath) {
         try {
             setSchema(new ReadableFile(filePath).toURI().toURL());
         } catch (MalformedURLException e) {
@@ -113,7 +121,7 @@ public class JaxbParser {
         }
     }
 
-    public void setSchema(URL schemaUrl) throws SAXException {
+    public void setSchema(URL schemaUrl) {
         schema = getSchemaFromUrl(schemaUrl);
         jaxbUnmarshaller.setSchema(schema);
         jaxbMarshaller.setSchema(schema);
