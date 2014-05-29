@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
 public class AddresseeTest {
@@ -20,7 +21,7 @@ public class AddresseeTest {
         String str = PARSER_ADR.marshal(ADDRESSEE);
         PARSER_ADR.validate(str);
 
-        String sampleAddressee = IOUtils.toString(AddresseeTest.class.getResource("/Addressee.xml"));
+        String sampleAddressee = IOUtils.toString(AddresseeTest.class.getResource("/Addressee.xml"), UTF_8);
         assertEquals(sampleAddressee, str);
 
         Addressee a2 = PARSER_ADR.unmarshal(str);

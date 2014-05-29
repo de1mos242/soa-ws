@@ -1,5 +1,6 @@
 package com.github.gkislin.common;
 
+import com.github.gkislin.common.web.WebStateException;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,6 +80,10 @@ public class LoggerWrapper {
     public UnsupportedOperationException getUnsupportedOperationException(String msg) {
         logger.error(msg);
         return new UnsupportedOperationException(msg);
+    }
+
+    public StateException getStateException(WebStateException e) {
+        return getStateException(e.getMessage(), e.getFaultInfo());
     }
 
     public StateException getStateException(String msg, ExceptionType type) {

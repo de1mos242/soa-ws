@@ -20,8 +20,15 @@ public class Addressee {
     public Addressee() {
     }
 
-    protected Addressee(String email) {
-        this.email = email;
+    protected Addressee(String mail) {
+        mail = mail.trim();
+        int idx = mail.indexOf('<');
+        if (idx == -1) {
+            this.email = mail;
+        } else {
+            this.name = mail.substring(0, idx).trim();
+            this.email = mail.substring(idx + 1, mail.length() - 1).trim();
+        }
     }
 
     public Addressee(String name, String email) {

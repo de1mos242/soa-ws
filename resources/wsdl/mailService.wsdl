@@ -7,7 +7,26 @@
     <types>
         <xs:schema targetNamespace="http://mail.gkislin.github.com/">
 
-            <xs:import namespace="http://web.common.gkislin.github.com/" schemaLocation="common.xsd"/>
+            <xs:element name="webStateException" nillable="true" type="tns:exceptionType"/>
+
+            <xs:simpleType name="exceptionType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="SYSTEM"/>
+                    <xs:enumeration value="DATA_BASE"/>
+                    <xs:enumeration value="STATE"/>
+                    <xs:enumeration value="AUTHORIZATION"/>
+                    <xs:enumeration value="CONFIGURATION"/>
+                    <xs:enumeration value="ILLEGAL_ARGUMENT"/>
+                    <xs:enumeration value="BPM"/>
+                    <xs:enumeration value="FILE"/>
+                    <xs:enumeration value="REPORTS"/>
+                    <xs:enumeration value="EMAIL"/>
+                    <xs:enumeration value="TEMPLATE"/>
+                    <xs:enumeration value="ONE_C"/>
+                    <xs:enumeration value="ATTACH"/>
+                    <xs:enumeration value="LDAP"/>
+                </xs:restriction>
+            </xs:simpleType>
 
             <xs:element name="addressee" type="tns:addressee"/>
             <xs:element name="sendMail" type="tns:sendMail"/>

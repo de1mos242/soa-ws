@@ -1,6 +1,5 @@
 package com.github.gkislin.mail;
 
-import com.github.gkislin.common.ExceptionType;
 import com.github.gkislin.common.LoggerWrapper;
 import com.github.gkislin.common.StateException;
 
@@ -16,7 +15,7 @@ public class MailSender {
 
     static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
-        throw LOGGER.getStateException("Тест", ExceptionType.EMAIL);
+//        throw LOGGER.getStateException("Тест", ExceptionType.EMAIL);
     }
 }
 
