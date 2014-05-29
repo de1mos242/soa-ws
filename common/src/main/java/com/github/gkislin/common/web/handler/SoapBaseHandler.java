@@ -1,4 +1,4 @@
-package com.github.gkislin.common.web;
+package com.github.gkislin.common.web.handler;
 
 import com.sun.xml.ws.api.handler.MessageHandler;
 import com.sun.xml.ws.api.handler.MessageHandlerContext;

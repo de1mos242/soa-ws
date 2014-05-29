@@ -6,7 +6,7 @@ import com.github.gkislin.common.LoggingLevel;
 import com.github.gkislin.common.StateException;
 import com.github.gkislin.common.io.ReadableFile;
 import com.github.gkislin.common.util.Util;
-import com.github.gkislin.common.web.SoapClientLoggingHandler;
+import com.github.gkislin.common.web.handler.SoapClientLoggingHandler;
 import com.github.gkislin.common.web.WebStateException;
 import org.apache.commons.lang.StringUtils;
 

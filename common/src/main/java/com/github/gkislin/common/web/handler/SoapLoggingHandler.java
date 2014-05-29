@@ -1,9 +1,10 @@
-package com.github.gkislin.common.web;
+package com.github.gkislin.common.web.handler;
 
 import com.github.gkislin.common.LoggerWrapper;
 import com.github.gkislin.common.LoggingLevel;
 import com.github.gkislin.common.io.IOUtil;
 import com.github.gkislin.common.util.Util;
+import com.sun.xml.txw2.output.IndentingXMLStreamWriter;
 import com.sun.xml.ws.api.handler.MessageHandlerContext;
 import com.sun.xml.ws.api.message.Message;
 import com.sun.xml.ws.api.streaming.XMLStreamWriterFactory;
@@ -18,11 +19,11 @@ import java.util.Map;
  * Refactored from:
  *
  * @see {http://weblogs.java.net/blog/ramapulavarthi/archive/2007/12/extend_your_web.html
- *      http://fisheye5.cenqua.com/browse/jax-ws-sources/jaxws-ri/samples/efficient_handler/src/efficient_handler/common/LoggingHandler.java?r=MAIN}
- *      <p/>
- *      This simple LoggingHandler will log the contents of incoming
- *      and outgoing messages. This is implemented as a MessageHandler
- *      for better performance over SOAPHandler.
+ * http://fisheye5.cenqua.com/browse/jax-ws-sources/jaxws-ri/samples/efficient_handler/src/efficient_handler/common/LoggingHandler.java?r=MAIN}
+ * <p/>
+ * This simple LoggingHandler will log the contents of incoming
+ * and outgoing messages. This is implemented as a MessageHandler
+ * for better performance over SOAPHandler.
  */
 
 public abstract class SoapLoggingHandler extends SoapBaseHandler {
@@ -94,8 +95,8 @@ public abstract class SoapLoggingHandler extends SoapBaseHandler {
             try {
                 IOUtil.StringOutputStream out = new IOUtil.StringOutputStream();
                 XMLStreamWriter writer = XMLStreamWriterFactory.create(out, "UTF-8");
-//                IndentingXMLStreamWriter wrap = new IndentingXMLStreamWriter(writer);
-                msg.writeTo(writer);
+                IndentingXMLStreamWriter wrap = new IndentingXMLStreamWriter(writer);
+                msg.writeTo(wrap);
                 return out.toString();
             } catch (Exception e) {
                 LOGGER.warn("Coudn't get SOAP message for logging", e);

@@ -1,0 +1,12 @@
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
+    <handler-chain>
+        <handler>
+            <handler-name>SoapLoggingHandler</handler-name>
+            <handler-class>com.github.gkislin.common.web.handler.SoapServerLoggingHandler</handler-class>
+        </handler>
+        <handler>
+            <handler-name>SoapStatisticHandler</handler-name>
+            <handler-class>com.github.gkislin.common.web.handler.SoapStatisticHandler</handler-class>
+        </handler>
+    </handler-chain>
+</handler-chains>

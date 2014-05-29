@@ -16,6 +16,22 @@
 
     <build>
         <finalName>mail</finalName>
+        <resources>
+            <resource>
+                <directory>${root.resources}</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>log4j.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${root.resources}/wsdl/handler</directory>
+                <includes>
+                    <include>wsHandlers.xml</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
