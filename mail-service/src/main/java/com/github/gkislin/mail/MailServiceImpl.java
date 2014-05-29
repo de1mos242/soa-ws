@@ -8,6 +8,7 @@ import javax.jws.WebService;
 import java.util.List;
 
 @WebService(endpointInterface = "com.github.gkislin.mail.MailService")
+                                //, wsdlLocation = "WEB-INF/wsdl/mailService.wsdl")
 public class MailServiceImpl implements MailService {
 
     @Override

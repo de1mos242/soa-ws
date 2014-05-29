@@ -16,6 +16,25 @@
 
     <build>
         <finalName>mail</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${root.resources}/wsdl</directory>
+                            <includes>
+                                <include>mailService.wsdl</include>
+                                <include>common.xsd</include>
+                            </includes>
+                            <targetPath>WEB-INF/wsdl</targetPath>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <dependencies>
