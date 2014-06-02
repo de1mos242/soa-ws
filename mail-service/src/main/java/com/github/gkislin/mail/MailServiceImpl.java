@@ -8,8 +8,8 @@ import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import java.util.List;
 
-@WebService(endpointInterface = "com.github.gkislin.mail.MailService"
-                                , wsdlLocation = "WEB-INF/wsdl/mailService.wsdl")
+@WebService(endpointInterface = "com.github.gkislin.mail.MailService")
+//                                , wsdlLocation = "WEB-INF/wsdl/mailService.wsdl")
 @HandlerChain(file = "wsHandlers.xml")
 public class MailServiceImpl implements MailService {
 
