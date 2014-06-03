@@ -7,7 +7,7 @@
     <types>
         <xs:schema targetNamespace="http://mail.gkislin.github.com/">
 
-            <xs:import namespace="http://web.common.gkislin.github.com" schemaLocation="common.xsd"/>
+            <xs:import namespace="http://web.common.gkislin.github.com/" schemaLocation="common.xsd"/>
 
             <xs:element name="addressee" type="tns:addressee"/>
             <xs:element name="sendMail" type="tns:sendMail"/>
