@@ -4,22 +4,16 @@ package com.github.gkislin.mail;
 import com.github.gkislin.common.LoggerWrapper;
 import com.github.gkislin.common.LoggingLevel;
 import com.github.gkislin.common.StateException;
-import com.github.gkislin.common.io.ReadableFile;
 import com.github.gkislin.common.util.Util;
-import com.github.gkislin.common.web.handler.SoapClientLoggingHandler;
 import com.github.gkislin.common.web.WebStateException;
+import com.github.gkislin.common.web.WsClient;
+import com.github.gkislin.common.web.handler.SoapClientLoggingHandler;
 import org.apache.commons.lang.StringUtils;
 
 import javax.xml.namespace.QName;
-import javax.xml.ws.Binding;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.handler.Handler;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: gkislin
@@ -27,20 +21,21 @@ import java.util.Map;
  */
 public class MailWSClient {
 
-    //    static String mailWsdl;
-    private static final Service SERVICE;
+    private static final WsClient<MailService> WS_CLIENT;
     private static final LoggerWrapper LOGGER = LoggerWrapper.get(MailWSClient.class);
-    private static String mailWsdl;
-    static SoapClientLoggingHandler loggingHandler = new SoapClientLoggingHandler(LoggingLevel.DEBUG);
+    private static final SoapClientLoggingHandler LOGGING_HANDLER = new SoapClientLoggingHandler(LoggingLevel.DEBUG);
+
+    static String user = "user", password = "password";
 
     static {
-        QName qname = new QName("http://mail.gkislin.github.com/", "MailServiceImplService");
-        URL wsdlDocumentLocation = ReadableFile.getResourceUrl("wsdl/mailService.wsdl");
-        SERVICE = Service.create(wsdlDocumentLocation, qname);
+        WS_CLIENT = new WsClient<>(
+                "wsdl/mailService.wsdl",
+                new QName("http://mail.gkislin.github.com/", "MailServiceImplService"),
+                MailService.class);
     }
 
     public static void setHost(String host) {
-        mailWsdl = host + "/mail/mailService?wsdl";
+        WS_CLIENT.setEndpointAddress(host + "/mail/mailService?wsdl");
     }
 
     // Get from "Name <mail>" or "mail"
@@ -58,18 +53,9 @@ public class MailWSClient {
     }
 
     private static MailService getPort() {
-        MailService port = SERVICE.getPort(MailService.class);
-
-        BindingProvider bp = (BindingProvider) port;
-        Map<String, Object> requestContext = bp.getRequestContext();
-        requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, mailWsdl);
-
-        // logging
-        Binding binding = bp.getBinding();
-        List<Handler> handlerList = binding.getHandlerChain();
-        handlerList.add(loggingHandler);
-        binding.setHandlerChain(handlerList);
-
+        MailService port = WS_CLIENT.getPort();
+        WsClient.setHandler(port, LOGGING_HANDLER);
+        WsClient.setAuth(port, user, password);
         return port;
     }
 
