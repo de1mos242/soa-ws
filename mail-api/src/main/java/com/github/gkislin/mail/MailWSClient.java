@@ -4,6 +4,7 @@ package com.github.gkislin.mail;
 import com.github.gkislin.common.LoggerWrapper;
 import com.github.gkislin.common.LoggingLevel;
 import com.github.gkislin.common.StateException;
+import com.github.gkislin.common.config.RootConfig;
 import com.github.gkislin.common.util.Util;
 import com.github.gkislin.common.web.WebStateException;
 import com.github.gkislin.common.web.WsClient;
@@ -25,13 +26,17 @@ public class MailWSClient {
     private static final LoggerWrapper LOGGER = LoggerWrapper.get(MailWSClient.class);
     private static final SoapClientLoggingHandler LOGGING_HANDLER = new SoapClientLoggingHandler(LoggingLevel.DEBUG);
 
-    static String user = "user", password = "password";
+    static String user, password;
 
     static {
         WS_CLIENT = new WsClient<>(
                 "wsdl/mailService.wsdl",
                 new QName("http://mail.gkislin.github.com/", "MailServiceImplService"),
                 MailService.class);
+        setHost(RootConfig.get().getHost("mail"));
+
+        user = RootConfig.getConf().getString("mail.client.user");
+        password = RootConfig.getConf().getString("mail.client.password");
     }
 
     public static void setHost(String host) {

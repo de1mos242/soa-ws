@@ -20,8 +20,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.gkislin</groupId>
-            <artifactId>common</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mail-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

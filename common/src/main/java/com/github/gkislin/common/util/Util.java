@@ -5,6 +5,7 @@ import com.github.gkislin.common.Presentable;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -96,5 +97,9 @@ public class Util {
 
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
+    }
+
+    public static boolean isNotEmpty(List collection) {
+        return collection != null && !collection.isEmpty();
     }
 }
