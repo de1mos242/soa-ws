@@ -48,7 +48,7 @@ public class SoapServerLoginHandler implements SOAPHandler<SOAPMessageContext> {
                     throw new SecurityException("Not authorized");
                 }
                 String user = RootConfig.getConf().getString("mail.client.user");
-                String password = "xxx";
+                String password = RootConfig.getConf().getString("mail.client.password");
                 String rightHeader = ServletUtil.encodeBasicAuthHeader(user, password);
                 System.out.println("check: " + httpHeaders.get(AUTHORIZATION).get(0) + " vs " + rightHeader);
                 if (!httpHeaders.get(AUTHORIZATION).get(0).equals(rightHeader)) {
