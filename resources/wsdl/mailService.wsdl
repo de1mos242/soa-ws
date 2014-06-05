@@ -3,8 +3,13 @@
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://mail.gkislin.github.com/"
         xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:common="http://web.common.gkislin.github.com/"
         targetNamespace="http://mail.gkislin.github.com/" name="MailServiceImplService">
+
+    <!--<import namespace="http://web.common.gkislin.github.com/" location="common.wsdl"/>-->
+
     <types>
+
         <xs:schema targetNamespace="http://mail.gkislin.github.com/">
 
             <xs:import namespace="http://web.common.gkislin.github.com/" schemaLocation="common.xsd"/>
@@ -40,7 +45,7 @@
         <part name="parameters" element="tns:sendMailResponse"/>
     </message>
     <message name="WebStateException">
-        <part name="fault" element="tns:webStateException"/>
+        <part name="fault" element="common:webStateException"/>
     </message>
     <portType name="MailService">
         <operation name="sendMail">

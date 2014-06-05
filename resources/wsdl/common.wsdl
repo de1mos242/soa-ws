@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions
+        targetNamespace="http://web.common.gkislin.github.com/"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://web.common.gkislin.github.com/">
+
+    <types>
+        <xs:schema targetNamespace="http://web.common.gkislin.github.com/">
+            <xs:include schemaLocation="common.xsd"/>
+        </xs:schema>
+    </types>
+
+    <message name="WebStateException">
+        <part name="fault" element="tns:webStateException"/>
+    </message>
+</definitions>
