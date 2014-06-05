@@ -24,8 +24,27 @@
                     <xs:element name="cc" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="subject" type="xs:string" minOccurs="0"/>
                     <xs:element name="body" type="xs:string" minOccurs="0"/>
+                    <xs:element name="attachments" type="tns:urlAttach" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="urlAttach">
+                <xs:complexContent>
+                    <xs:extension base="tns:attach">
+                        <xs:sequence>
+                            <xs:element name="url" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="attach">
+                <xs:sequence>
+                    <xs:element name="description" type="xs:string" minOccurs="0"/>
+                    <xs:element name="name" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
             <xs:complexType name="addressee">
                 <xs:simpleContent>
                     <xs:extension base="xs:string">

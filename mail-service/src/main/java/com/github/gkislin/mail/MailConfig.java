@@ -9,6 +9,8 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
 import javax.mail.Authenticator;
+import javax.mail.internet.MimeUtility;
+import java.io.UnsupportedEncodingException;
 
 /**
  * User: gkislin
@@ -73,5 +75,12 @@ public class MailConfig implements IConfig {
         email.setAuthenticator(auth);
         email.setCharset(charset);
         return email;
+    }
+
+    public String encodeWord(String word) throws UnsupportedEncodingException {
+        if (word == null) {
+            return null;
+        }
+        return MimeUtility.encodeWord(word, charset, null);
     }
 }

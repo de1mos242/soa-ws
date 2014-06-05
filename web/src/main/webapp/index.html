@@ -13,7 +13,8 @@
     <table>
         <tr>
             <td>
-                <form id="mail" method="post" action="sendMail" enctype="application/x-www-form-urlencoded">
+                <!--<form id="mail" method="post" action="sendMail" enctype="application/x-www-form-urlencoded">-->
+                <form id="mail" method="post" action="sendMail" enctype="multipart/form-data">
                     <dl>
                         <dt>To:</dt>
                         <dd><input type="text" name="to" size=30></dd>
@@ -29,6 +30,10 @@
                     <dl>
                         <dt>Body:</dt>
                         <dd><textarea type="text" name="body" cols="40" rows="10"></textarea></dd>
+                    </dl>
+                    <dl>
+                        <dt>Attachments:</dt>
+                        <dd><input type="file" name="file"></dd>
                     </dl>
                     <button type="submit">Send Mail</button>
                 </form>
