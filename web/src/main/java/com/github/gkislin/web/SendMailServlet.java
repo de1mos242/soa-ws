@@ -45,9 +45,14 @@ public class SendMailServlet extends CommonServlet {
             } catch (FileUploadException e) {
                 throw logger.getStateException("Ошибка загрузки файла", ExceptionType.ATTACH, e);
             }
-            MailWSClient.sendMail(fromParam(params, "to"), fromParam(params, "cc"), params.get("subject"), params.get("body"),
-                    ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_URL_CONVERTER, ExceptionType.ATTACH));
 
+            if ("urlType".equals(params.get("type"))) {
+                MailWSClient.sendMailUrl(fromParam(params, "to"), fromParam(params, "cc"), params.get("subject"), params.get("body"),
+                        ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_URL_CONVERTER, ExceptionType.ATTACH));
+            } else {
+                MailWSClient.sendMailMime(fromParam(params, "to"), fromParam(params, "cc"), params.get("subject"), params.get("body"),
+                        ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_MIME_CONVERTER, ExceptionType.ATTACH));
+            }
         }
         response.sendRedirect(request.getContextPath());
     }

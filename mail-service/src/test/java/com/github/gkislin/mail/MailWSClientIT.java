@@ -12,7 +12,7 @@ public class MailWSClientIT {
     @Test
     public void testSendMail() throws Exception {
 //        MailWSClient.setHost("http://localhost:8080");
-        MailWSClient.sendMail(MailWSClient.create("Григорий <gkislin@yandex.ru>"), null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
+        MailWSClient.sendMailUrl(MailWSClient.create("Григорий <gkislin@yandex.ru>"), null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
                 new UrlAttach("Имя.png", "file:///d:/doc/35.png")));
     }
 }

@@ -3,6 +3,8 @@ package com.github.gkislin.mail;
 import com.github.gkislin.common.ExceptionType;
 import com.github.gkislin.common.LoggerWrapper;
 import com.github.gkislin.common.StateException;
+import com.github.gkislin.common.converter.Converter;
+import com.github.gkislin.common.converter.ConverterUtil;
 import com.github.gkislin.common.util.Util;
 import org.apache.commons.mail.HtmlEmail;
 
@@ -15,6 +17,11 @@ import java.util.List;
 public class MailSender {
     private static final LoggerWrapper LOGGER = LoggerWrapper.get(MailSender.class);
 
+
+    static <T extends Attach> void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body, List<T> attachments,
+                                            Converter<T, MailAttach> converter) throws StateException {
+        sendMail(to, cc, subject, body, ConverterUtil.convert(attachments, converter, ExceptionType.ATTACH));
+    }
 
     static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body, List<MailAttach> attachments) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));

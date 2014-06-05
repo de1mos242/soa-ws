@@ -49,13 +49,22 @@ public class MailWSClient {
     }
 
     public static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) throws StateException {
-        sendMail(to, cc, subject, body, null);
+        sendMailUrl(to, cc, subject, body, null);
     }
 
-    public static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body, List<UrlAttach> attachments) throws StateException {
+    public static void sendMailUrl(List<Addressee> to, List<Addressee> cc, String subject, String body, List<UrlAttach> attachments) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
         try {
-            getPort().sendMail(to, cc, subject, body, attachments);
+            getPort().sendMailUrl(to, cc, subject, body, attachments);
+        } catch (WebStateException e) {
+            throw LOGGER.getStateException(e);
+        }
+    }
+
+    public static void sendMailMime(List<Addressee> to, List<Addressee> cc, String subject, String body, List<MimeAttach> attachments) throws StateException {
+        LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
+        try {
+            getPort().sendMailMime(to, cc, subject, body, attachments);
         } catch (WebStateException e) {
             throw LOGGER.getStateException(e);
         }

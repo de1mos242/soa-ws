@@ -18,4 +18,10 @@ public class AttachConverters {
         }
     };
 
+    public static final Converter<MimeAttach, MailAttach> MIME_ATTACH_CONVERTER = new Converter<MimeAttach, MailAttach>() {
+        @Override
+        public MailAttach convert(MimeAttach mimeAttach) throws Exception {
+            return new MailAttach(mimeAttach.getName(), mimeAttach.dataHandler.getDataSource(), mimeAttach.getDescription());
+        }
+    };
 }
