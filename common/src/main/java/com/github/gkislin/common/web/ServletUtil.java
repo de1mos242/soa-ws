@@ -29,7 +29,7 @@ public class ServletUtil {
 
     public static void checkBasicAuth(Map<String, List<String>> headers, String authHeader) {
         List<String> header = headers.get(AUTHORIZATION);
-        if (header.size() != 1 || !authHeader.equals(header.get(0))) {
+        if (header==null || header.size() != 1 || !authHeader.equals(header.get(0))) {
             LOGGER.warn("Unauthorized access");
             throw new SecurityException();
         }
