@@ -6,7 +6,7 @@ CREATE TABLE mail_hist (
   body TEXT,
   state TEXT NOT NULL,
   date TIMESTAMP,
-  list_attach VARCHAR,
+  attach_list VARCHAR,
   CONSTRAINT mail_hist_pkey PRIMARY KEY (id)
 );
 
