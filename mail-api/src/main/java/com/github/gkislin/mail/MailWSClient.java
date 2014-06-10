@@ -34,9 +34,14 @@ public class MailWSClient {
                 new QName("http://mail.gkislin.github.com/", "MailServiceImplService"),
                 MailService.class);
         setHost(RootConfig.get().getHost("mail"));
+        setCredential(
+                RootConfig.getConf().getString("mail.client.user"),
+                RootConfig.getConf().getString("mail.client.password"));
+    }
 
-        user = RootConfig.getConf().getString("mail.client.user");
-        password = RootConfig.getConf().getString("mail.client.password");
+    public static void setCredential(String user, String password) {
+        MailWSClient.user = user;
+        MailWSClient.password = password;
     }
 
     public static void setHost(String host) {
@@ -73,7 +78,9 @@ public class MailWSClient {
     private static MailService getPort() {
         MailService port = WS_CLIENT.getPort();
         WsClient.setHandler(port, LOGGING_HANDLER);
-        WsClient.setAuth(port, user, password);
+        if (user != null && password != null) {
+            WsClient.setAuth(port, user, password);
+        }
         return port;
     }
 

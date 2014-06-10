@@ -1,18 +1,59 @@
 package com.github.gkislin.mail;
 
+import com.github.gkislin.common.config.RootConfig;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * User: gkislin
  * Date: 28.01.14
  */
 public class MailWSClientIT {
+    private static final UrlAttach ATTACH;
+    private static final List<Addressee> ADDRESSEE_LIST;
+
+    static {
+        ATTACH = new UrlAttach("Одуванчик.jpg", MailWSClientIT.class.getClassLoader().getResource("Одуванчик.jpg").toString());
+        ADDRESSEE_LIST = MailWSClient.create("Имя <name@yandex.ru>");
+    }
+
     @Test
     public void testSendMail() throws Exception {
-//        MailWSClient.setHost("http://localhost:8080");
-        MailWSClient.sendMailUrl(MailWSClient.create("Имя <name@yandex.ru>"), null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
-                new UrlAttach("Имя.png", "file:///d:/doc/Картинка.png")));
+        MailWSClient.setCredential(
+                RootConfig.getConf().getString("mail.client.user"),
+                RootConfig.getConf().getString("mail.client.password"));
+
+        MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
+                ATTACH));
+    }
+
+    @Test
+    public void testNoAuthSendMail() throws Exception {
+        MailWSClient.setCredential(null, null);
+
+        try {
+            MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
+                    ATTACH));
+        } catch (Exception e) {
+            org.junit.Assert.assertTrue(e.getMessage().contains("401"));
+            return;
+        }
+        org.junit.Assert.fail();
+    }
+
+    @Test
+    public void testWrongAuthSendMail() throws Exception {
+        MailWSClient.setCredential("dummy", "dummy");
+
+        try {
+            MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
+                    ATTACH));
+        } catch (Exception e) {
+            org.junit.Assert.assertTrue(e.getMessage().contains("403"));
+            return;
+        }
+        org.junit.Assert.fail();
     }
 }
