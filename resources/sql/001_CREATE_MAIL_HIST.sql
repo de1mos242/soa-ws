@@ -6,7 +6,8 @@ CREATE TABLE mail_hist (
   body TEXT,
   state TEXT NOT NULL,
   date TIMESTAMP,
-  list_attach VARCHAR
+  list_attach VARCHAR,
+  CONSTRAINT mail_hist_pkey PRIMARY KEY (id)
 );
 
 COMMENT ON TABLE mail_hist
