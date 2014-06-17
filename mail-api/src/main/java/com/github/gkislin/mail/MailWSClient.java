@@ -5,6 +5,7 @@ import com.github.gkislin.common.LoggerWrapper;
 import com.github.gkislin.common.LoggingLevel;
 import com.github.gkislin.common.StateException;
 import com.github.gkislin.common.config.RootConfig;
+import com.github.gkislin.common.util.AsyncExecutor;
 import com.github.gkislin.common.util.Util;
 import com.github.gkislin.common.web.ServletUtil;
 import com.github.gkislin.common.web.WebStateException;
@@ -60,22 +61,32 @@ public class MailWSClient {
         sendMailUrl(to, cc, subject, body, null, async);
     }
 
-    public static void sendMailUrl(List<Addressee> to, List<Addressee> cc, String subject, String body, List<UrlAttach> attachments, boolean async) throws StateException {
+    public static void sendMailUrl(final List<Addressee> to, final List<Addressee> cc, final String subject, final String body, final List<UrlAttach> attachments, boolean async) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
-        try {
-            getPort().sendMailUrl(to, cc, subject, body, attachments);
-        } catch (WebStateException e) {
-            throw LOGGER.getStateException(e);
-        }
+        AsyncExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getPort().sendMailUrl(to, cc, subject, body, attachments);
+                } catch (WebStateException e) {
+                    throw LOGGER.getStateException(e);
+                }
+            }
+        }, async);
     }
 
-    public static void sendMailMime(List<Addressee> to, List<Addressee> cc, String subject, String body, List<MimeAttach> attachments, boolean async) throws StateException {
+    public static void sendMailMime(final List<Addressee> to, final List<Addressee> cc, final String subject, final String body, final List<MimeAttach> attachments, boolean async) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
-        try {
-            getPort().sendMailMime(to, cc, subject, body, attachments);
-        } catch (WebStateException e) {
-            throw LOGGER.getStateException(e);
-        }
+        AsyncExecutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getPort().sendMailMime(to, cc, subject, body, attachments);
+                } catch (WebStateException e) {
+                    throw LOGGER.getStateException(e);
+                }
+            }
+        }, async);
     }
 
     private static MailService getPort() {

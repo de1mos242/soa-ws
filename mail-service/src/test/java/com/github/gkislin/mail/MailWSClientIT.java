@@ -16,7 +16,7 @@ public class MailWSClientIT {
 
     static {
         ATTACH = new UrlAttach("Одуванчик.jpg", MailWSClientIT.class.getClassLoader().getResource("Одуванчик.jpg").toString());
-        ADDRESSEE_LIST = MailWSClient.create("Имя <name@yandex.ru>");
+        ADDRESSEE_LIST = MailWSClient.create("Имя <gkislin@yandex.ru>");
     }
 
     @Test
@@ -26,7 +26,18 @@ public class MailWSClientIT {
                 RootConfig.getConf().getString("mail.client.password"));
 
         MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
-                ATTACH));
+                ATTACH), false);
+    }
+
+    @Test
+    public void testSendMailAsync() throws Exception {
+        MailWSClient.setCredential(
+                RootConfig.getConf().getString("mail.client.user"),
+                RootConfig.getConf().getString("mail.client.password"));
+
+        MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Аснихронная отправка почты", "<h2>Боди</h2>", Collections.singletonList(
+                ATTACH), true);
+        Thread.sleep(10000);
     }
 
     @Test
@@ -35,7 +46,7 @@ public class MailWSClientIT {
 
         try {
             MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
-                    ATTACH));
+                    ATTACH), false);
         } catch (Exception e) {
             org.junit.Assert.assertTrue(e.getMessage().contains("401"));
             return;
@@ -49,7 +60,7 @@ public class MailWSClientIT {
 
         try {
             MailWSClient.sendMailUrl(ADDRESSEE_LIST, null, "Русский текст", "<h2>Боди</h2>", Collections.singletonList(
-                    ATTACH));
+                    ATTACH), false);
         } catch (Exception e) {
             org.junit.Assert.assertTrue(e.getMessage().contains("403"));
             return;

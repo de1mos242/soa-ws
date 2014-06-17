@@ -57,6 +57,13 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.github.gkislin</groupId>
+            <artifactId>test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
             <version>2.2.8</version>
