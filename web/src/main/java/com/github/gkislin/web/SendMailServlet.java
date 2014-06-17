@@ -48,10 +48,10 @@ public class SendMailServlet extends CommonServlet {
 
             if ("urlType".equals(params.get("type"))) {
                 MailWSClient.sendMailUrl(fromParam(params, "to"), fromParam(params, "cc"), params.get("subject"), params.get("body"),
-                        ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_URL_CONVERTER, ExceptionType.ATTACH));
+                        ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_URL_CONVERTER, ExceptionType.ATTACH), false);
             } else {
                 MailWSClient.sendMailMime(fromParam(params, "to"), fromParam(params, "cc"), params.get("subject"), params.get("body"),
-                        ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_MIME_CONVERTER, ExceptionType.ATTACH));
+                        ConverterUtil.convert(attachments, FileItemAttachConverters.FILE_ITEM_MIME_CONVERTER, ExceptionType.ATTACH), false);
             }
         }
         response.sendRedirect(request.getContextPath());
