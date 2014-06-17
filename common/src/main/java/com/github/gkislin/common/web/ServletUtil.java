@@ -2,6 +2,8 @@ package com.github.gkislin.common.web;
 
 import com.github.gkislin.common.LoggerWrapper;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
@@ -25,16 +27,20 @@ public class ServletUtil {
         return "Basic " + DatatypeConverter.printBase64Binary(authString.getBytes());
     }
 
-    public static void checkBasicAuth(HttpServletRequest request, HttpServletResponse response, String authHeader) {
+    public static boolean checkBasicAuth(ServletRequest req, ServletResponse resp, String authHeader) {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
+
         int code = getResponseCode(request.getHeader(AUTHORIZATION), authHeader);
         try {
             if (code != 0) {
                 response.sendError(code);
-                throw new SecurityException();
+                return false;
             }
         } catch (IOException e) {
             throw LOGGER.getIllegalStateException(e);
         }
+        return true;
     }
 
     public static int getResponseCode(String header, String authHeader) {

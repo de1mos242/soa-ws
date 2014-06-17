@@ -17,6 +17,10 @@ abstract public class SoapServerSecurityHandler extends SoapBaseHandler {
     private static final LoggerWrapper LOGGER = LoggerWrapper.get(SoapServerSecurityHandler.class);
     private String authHeader;
 
+    public SoapServerSecurityHandler(String authHeader) {
+        this.authHeader = authHeader;
+    }
+
     public SoapServerSecurityHandler(String user, String password) {
         this.authHeader = ServletUtil.encodeBasicAuthHeader(user, password);
     }

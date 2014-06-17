@@ -6,8 +6,10 @@ import com.github.gkislin.common.StateException;
 import com.github.gkislin.common.converter.Converter;
 import com.github.gkislin.common.converter.ConverterUtil;
 import com.github.gkislin.common.util.Util;
+import com.github.gkislin.mail.dao.MailHistoryDAO;
 import org.apache.commons.mail.HtmlEmail;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -45,8 +47,19 @@ public class MailSender {
                 }
             }
             email.send();
+            MailHistoryDAO.save(to, cc, subject, body, "OK");
+
+        } catch (SQLException se) {
+            throw LOGGER.getStateException("Ошибка записи в историю", ExceptionType.DATA_BASE, se);
+
         } catch (Exception e) {
-            throw LOGGER.getStateException(e.toString(), ExceptionType.EMAIL, e);
+            StateException se = LOGGER.getStateException(ExceptionType.EMAIL, e);
+            try {
+                MailHistoryDAO.save(to, cc, subject, body, e.toString());
+            } catch (SQLException sqle) {
+                LOGGER.error(sqle);
+            }
+            throw se;
         }
     }
 }

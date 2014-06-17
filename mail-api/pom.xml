@@ -45,5 +45,11 @@
             <version>1.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.gkislin</groupId>
+            <artifactId>test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

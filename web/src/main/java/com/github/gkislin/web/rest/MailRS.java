@@ -29,14 +29,14 @@ public class MailRS {
 
     @GET
     @Path("/mail/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("application/json; charset=UTF-8")
     public MailHist mail(@PathParam("id") int id) {
         return MailHistoryDAO.get(id);
     }
 
     @GET
     @Path("/mails")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces("application/json; charset=UTF-8")
     public List<MailHist> mails() {
         return MailHistoryDAO.getAll();
     }

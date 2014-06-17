@@ -8,6 +8,6 @@ import com.github.gkislin.common.web.handler.SoapServerSecurityHandler;
  */
 public class MailSecurityHandler extends SoapServerSecurityHandler {
     public MailSecurityHandler() {
-        super(MailWSClient.user, MailWSClient.password);
+        super(MailWSClient.getAuthHeader());
     }
 }

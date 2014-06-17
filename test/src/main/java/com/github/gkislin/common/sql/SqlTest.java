@@ -17,6 +17,7 @@ public class SqlTest {
         dataSource.setUrl(dbUrl);
         dataSource.setUsername(dbUser);
         dataSource.setPassword(dbPsw);
+        dataSource.setDriverClassName("org.postgresql.Driver");
 
         DataSourceProvider.dataSourceFactory = new DataSourceProvider.DataSourceFactory() {
             @Override

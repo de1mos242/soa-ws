@@ -6,6 +6,7 @@ import com.github.gkislin.common.LoggingLevel;
 import com.github.gkislin.common.StateException;
 import com.github.gkislin.common.config.RootConfig;
 import com.github.gkislin.common.util.Util;
+import com.github.gkislin.common.web.ServletUtil;
 import com.github.gkislin.common.web.WebStateException;
 import com.github.gkislin.common.web.WsClient;
 import com.github.gkislin.common.web.handler.SoapClientLoggingHandler;
@@ -26,7 +27,8 @@ public class MailWSClient {
     private static final LoggerWrapper LOGGER = LoggerWrapper.get(MailWSClient.class);
     private static final SoapClientLoggingHandler LOGGING_HANDLER = new SoapClientLoggingHandler(LoggingLevel.DEBUG);
 
-    static String user, password;
+    private static String user, password;
+    private static String authHeader;
 
     static {
         WS_CLIENT = new WsClient<>(
@@ -42,6 +44,7 @@ public class MailWSClient {
     public static void setCredential(String user, String password) {
         MailWSClient.user = user;
         MailWSClient.password = password;
+        MailWSClient.authHeader = ServletUtil.encodeBasicAuthHeader(user, password);
     }
 
     public static void setHost(String host) {
@@ -49,15 +52,15 @@ public class MailWSClient {
     }
 
     // Get from "Name <mail>" or "mail"
-    public static void sendMail(String to, String cc, String subject, String body) throws StateException {
-        sendMail(create(to), create(cc), subject, body);
+    public static void sendMail(String to, String cc, String subject, String body, boolean async) throws StateException {
+        sendMail(create(to), create(cc), subject, body, async);
     }
 
-    public static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body) throws StateException {
-        sendMailUrl(to, cc, subject, body, null);
+    public static void sendMail(List<Addressee> to, List<Addressee> cc, String subject, String body, boolean async) throws StateException {
+        sendMailUrl(to, cc, subject, body, null, async);
     }
 
-    public static void sendMailUrl(List<Addressee> to, List<Addressee> cc, String subject, String body, List<UrlAttach> attachments) throws StateException {
+    public static void sendMailUrl(List<Addressee> to, List<Addressee> cc, String subject, String body, List<UrlAttach> attachments, boolean async) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
         try {
             getPort().sendMailUrl(to, cc, subject, body, attachments);
@@ -66,7 +69,7 @@ public class MailWSClient {
         }
     }
 
-    public static void sendMailMime(List<Addressee> to, List<Addressee> cc, String subject, String body, List<MimeAttach> attachments) throws StateException {
+    public static void sendMailMime(List<Addressee> to, List<Addressee> cc, String subject, String body, List<MimeAttach> attachments, boolean async) throws StateException {
         LOGGER.info("Send mail to '" + to + "' cc '" + cc + "' subject '" + subject + (LOGGER.isDebug() ? "\nbody=" + body : ""));
         try {
             getPort().sendMailMime(to, cc, subject, body, attachments);
@@ -102,5 +105,9 @@ public class MailWSClient {
         } else {
             return Collections.singletonList(new Addressee(emails));
         }
+    }
+
+    public static String getAuthHeader() {
+        return authHeader;
     }
 }
