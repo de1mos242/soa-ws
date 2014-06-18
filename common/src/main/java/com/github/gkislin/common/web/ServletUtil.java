@@ -2,6 +2,8 @@ package com.github.gkislin.common.web;
 
 import com.github.gkislin.common.LoggerWrapper;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
@@ -12,7 +14,7 @@ import java.io.IOException;
  * Date: 22.01.14
  */
 public class ServletUtil {
-    private static final String AUTHORIZATION = "Authorization";
+    public static final String AUTHORIZATION = "Authorization";
     private static final LoggerWrapper LOGGER = LoggerWrapper.get(ServletUtil.class);
 
     public static String toString(HttpServletRequest request) {
@@ -25,21 +27,31 @@ public class ServletUtil {
         return "Basic " + DatatypeConverter.printBase64Binary(authString.getBytes());
     }
 
-    public static void checkBasicAuth(HttpServletRequest request, HttpServletResponse response, String authHeader) {
-        String header = request.getHeader(AUTHORIZATION);
+    public static boolean checkBasicAuth(ServletRequest req, ServletResponse resp, String authHeader) {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
+
+        int code = getResponseCode(request.getHeader(AUTHORIZATION), authHeader);
         try {
-            if (header == null) {
-                LOGGER.warn("Unauthorized access");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-                throw new SecurityException();
-            }
-            if (!authHeader.equals(header)) {
-                LOGGER.warn("Wrong password access");
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                throw new SecurityException();
+            if (code != 0) {
+                response.sendError(code);
+                return false;
             }
         } catch (IOException e) {
             throw LOGGER.getIllegalStateException(e);
         }
+        return true;
+    }
+
+    public static int getResponseCode(String header, String authHeader) {
+        if (header == null) {
+            LOGGER.warn("Unauthorized access");
+            return HttpServletResponse.SC_UNAUTHORIZED;
+        }
+        if (!authHeader.equals(header)) {
+            LOGGER.warn("Wrong password access");
+            return HttpServletResponse.SC_FORBIDDEN;
+        }
+        return 0;
     }
 }

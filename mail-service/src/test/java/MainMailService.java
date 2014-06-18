@@ -1,4 +1,5 @@
 import com.github.gkislin.common.io.ReadableFile;
+import com.github.gkislin.common.sql.SqlTest;
 import com.github.gkislin.mail.MailServiceImpl;
 
 import javax.xml.transform.stream.StreamSource;
@@ -16,6 +17,7 @@ public class MainMailService {
 
 //        Endpoint.publish("http://localhost:8080/mail/mailService",
 //                new MailServiceImpl());
+        SqlTest.initDb();
 
         Endpoint endpoint = Endpoint.create(new MailServiceImpl());
         List metadata = Arrays.asList(

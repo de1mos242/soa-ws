@@ -1,0 +1,17 @@
+<jxb:bindings version="2.0"
+              xmlns="http://java.sun.com/xml/ns/jaxws"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <jxb:bindings  schemaLocation="common.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="masterj.common.types"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+    <jxb:globalBindings>
+        <xjc:superInterface name="java.io.Serializable"/>
+    </jxb:globalBindings>
+</jxb:bindings>
+

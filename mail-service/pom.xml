@@ -25,10 +25,7 @@
                 </includes>
             </resource>
             <resource>
-                <directory>${root.resources}/wsdl/handler</directory>
-                <includes>
-                    <include>wsHandlers.xml</include>
-                </includes>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
 
@@ -59,6 +56,13 @@
             <artifactId>mail-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.gkislin</groupId>
+            <artifactId>test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>

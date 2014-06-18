@@ -3,24 +3,54 @@
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://mail.gkislin.github.com/"
         xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:common="http://web.common.gkislin.github.com/"
+        xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
         targetNamespace="http://mail.gkislin.github.com/" name="MailServiceImplService">
+
+    <!--<import namespace="http://web.common.gkislin.github.com/" location="common.wsdl"/>-->
+
     <types>
+
         <xs:schema targetNamespace="http://mail.gkislin.github.com/">
 
             <xs:import namespace="http://web.common.gkislin.github.com/" schemaLocation="common.xsd"/>
 
             <xs:element name="addressee" type="tns:addressee"/>
-            <xs:element name="sendMail" type="tns:sendMail"/>
-            <xs:element name="sendMailResponse" type="tns:sendMailResponse"/>
+            <xs:element name="sendMailMime" type="tns:sendMailMime"/>
+            <xs:element name="sendMailMimeResponse" type="tns:sendMailMimeResponse"/>
+            <xs:element name="sendMailUrl" type="tns:sendMailUrl"/>
+            <xs:element name="sendMailUrlResponse" type="tns:sendMailUrlResponse"/>
 
-            <xs:complexType name="sendMail">
+            <xs:complexType name="sendMailUrl">
                 <xs:sequence>
                     <xs:element name="to" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="cc" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element name="subject" type="xs:string" minOccurs="0"/>
                     <xs:element name="body" type="xs:string" minOccurs="0"/>
+                    <xs:element name="attachments" type="tns:urlAttach" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="sendMailUrlResponse">
+                <xs:sequence/>
+            </xs:complexType>
+
+            <xs:complexType name="urlAttach">
+                <xs:complexContent>
+                    <xs:extension base="tns:attach">
+                        <xs:sequence>
+                            <xs:element name="url" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="attach">
+                <xs:sequence>
+                    <xs:element name="description" type="xs:string" minOccurs="0"/>
+                    <xs:element name="name" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
             <xs:complexType name="addressee">
                 <xs:simpleContent>
                     <xs:extension base="xs:string">
@@ -28,32 +58,87 @@
                     </xs:extension>
                 </xs:simpleContent>
             </xs:complexType>
-            <xs:complexType name="sendMailResponse">
+
+            <xs:complexType name="mimeAttach">
+                <xs:complexContent>
+                    <xs:extension base="tns:attach">
+                        <xs:sequence>
+                            <xs:element name="dataHandler" xmime:expectedContentTypes="application/octet-stream"
+                                        type="xs:base64Binary" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+
+            <xs:complexType name="sendMailMime">
+                <xs:sequence>
+                    <xs:element name="to" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="cc" type="tns:addressee" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="subject" type="xs:string" minOccurs="0"/>
+                    <xs:element name="body" type="xs:string" minOccurs="0"/>
+                    <xs:element name="attachments" xmime:expectedContentTypes="application/octet-stream"
+                                type="tns:mimeAttach" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="sendMailMimeResponse">
                 <xs:sequence/>
             </xs:complexType>
+
         </xs:schema>
     </types>
-    <message name="sendMail">
-        <part name="parameters" element="tns:sendMail"/>
+
+    <message name="sendMailUrl">
+        <part name="parameters" element="tns:sendMailUrl"/>
     </message>
-    <message name="sendMailResponse">
-        <part name="parameters" element="tns:sendMailResponse"/>
+    <message name="sendMailUrlResponse">
+        <part name="parameters" element="tns:sendMailUrlResponse"/>
     </message>
+
+    <message name="sendMailMime">
+        <part name="parameters" element="tns:sendMailMime"/>
+    </message>
+    <message name="sendMailMimeResponse">
+        <part name="parameters" element="tns:sendMailMimeResponse"/>
+    </message>
+
     <message name="WebStateException">
-        <part name="fault" element="tns:webStateException"/>
+        <part name="fault" element="common:webStateException"/>
     </message>
+
     <portType name="MailService">
-        <operation name="sendMail">
-            <input wsam:Action="http://mail.gkislin.github.com/MailService/sendMailRequest" message="tns:sendMail"/>
-            <output wsam:Action="http://mail.gkislin.github.com/MailService/sendMailResponse"
-                    message="tns:sendMailResponse"/>
+        <operation name="sendMailUrl">
+            <input wsam:Action="http://mail.gkislin.github.com/MailService/sendMailUrlRequest"
+                   message="tns:sendMailUrl"/>
+            <output wsam:Action="http://mail.gkislin.github.com/MailService/sendMailUrlResponse"
+                    message="tns:sendMailUrlResponse"/>
             <fault message="tns:WebStateException" name="WebStateException"
-                   wsam:Action="http://mail.gkislin.github.com/MailService/sendMail/Fault/WebStateException"/>
+                   wsam:Action="http://mail.gkislin.github.com/MailService/sendMailUrl/Fault/WebStateException"/>
+        </operation>
+        <operation name="sendMailMime">
+            <input wsam:Action="http://mail.gkislin.github.com/MailService/sendMailMimeRequest"
+                   message="tns:sendMailMime"/>
+            <output wsam:Action="http://mail.gkislin.github.com/MailService/sendMailMimeResponse"
+                    message="tns:sendMailMimeResponse"/>
+            <fault message="tns:WebStateException" name="WebStateException"
+                   wsam:Action="http://mail.gkislin.github.com/MailService/sendMailMime/Fault/WebStateException"/>
         </operation>
     </portType>
+
     <binding name="MailServiceImplPortBinding" type="tns:MailService">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <operation name="sendMail">
+        <operation name="sendMailUrl">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="WebStateException">
+                <soap:fault name="WebStateException" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="sendMailMime">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>
@@ -66,6 +151,7 @@
             </fault>
         </operation>
     </binding>
+
     <service name="MailServiceImplService">
         <port name="MailServiceImplPort" binding="tns:MailServiceImplPortBinding">
             <soap:address location="http://localhost:8080/mail/mailService"/>

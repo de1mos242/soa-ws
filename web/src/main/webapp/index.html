@@ -4,41 +4,143 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Mail Service</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/redmond/jquery-ui.css">
+    <link rel="stylesheet" href="css/redmond/jquery.ui.theme.css">
+    <link rel="stylesheet" href="css/ui.jqgrid.css">
 
     <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/i18n/grid.locale-en.js"></script>
+    <script src="js/jquery.jqGrid.min.js"></script>
 </head>
+<script>
+    var lastSel = -1;
+    $(document).ready(function () {
+        $("#mailHist").jqGrid({
+            datatype: "local",
+            height: 'auto',
+            colNames: ['id', 'Date', 'To', 'Cc', 'Subject', 'State'],
+            colModel: [
+                {name: 'id', hidden: true},
+//                {name: 'date', index: 'date', width: 150, sorttype:'date', formatter:'date', formatoptions: {srcformat: 'u', newformat:'d-M-y H:i'}},
+                {name: 'date', index: 'date', width: 150, sorttype: 'date',
+                    formatter: function (cellval, opts) {
+                        var date = new Date(cellval);
+                        opts = $.extend({}, $.jgrid.formatter.date);
+//                        return $.fmatter.util.DateFormat("", date, 'd-M-y H:i', opts);
+                        return $.jgrid.parseDate("", date, 'd-M-y H:i', opts);
+                    }},
+                {name: 'listTo', index: 'listTo', width: 300},
+                {name: 'listCc', index: 'listCc', width: 150},
+                {name: 'subject', index: 'subject', width: 400},
+                {name: 'state', index: 'state', width: 100}
+            ],
+            caption: "Mail History",
+            onSelectRow: function (id) {
+                if (id && id !== lastSel) {
+                    lastSel = id;
+                    var mailId = $(this).getRowData(lastSel)['id'];
+                    loadMailDetail(mailId);
+                }
+            }
+        });
+        function loadMailDetail(mailId) {
+            $("#result").hide();
+            $.get('rest/mail/' + mailId, function (gridData) {
+                $.each(gridData, function (id, value) {
+                    $("#" + id).val(value);
+                });
+            });
+        }
+        $("#reloadBtn").click(loadHistory);
+        function loadHistory() {
+            $.get('rest/mails', function (gridData) {
+                var $mailHist = $("#mailHist");
+                $mailHist.jqGrid('clearGridData');
+                $mailHist.jqGrid('setGridParam', {data: gridData}).trigger('reloadGrid');
+            });
+            lastSel = -1;
+        }
+
+        var $form = $("#mail");
+        $form.submit(function () {
+            var $result = $("#result");
+            $result.css('color', 'brown');
+            $result.html('<h2>Почта отправляется...</h2>')
+            $result.show();
+
+            var action = "sendMail";
+            $.ajax({
+                type: 'POST',
+                url: action,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                data: new FormData($form[0]),
+                success: function (data) {
+                    $result.css('color', 'green');
+                    $result.html('<h2>Почта успешно отправлена<h2>');
+                    $result.show();
+                    loadHistory();
+                }
+            });
+            return false;
+        });
+
+        $(document).ajaxError(function (event, xhr) {
+            var $result = $("#result");
+            $result.css('color', 'red');
+            $result.show();
+            $result.html(xhr.responseText);
+        });
+
+        loadHistory();
+    });
+</script>
 <body>
 <header>Mail Service</header>
 <section>
     <table>
         <tr>
             <td>
-                <form id="mail" method="post" action="sendMail" enctype="application/x-www-form-urlencoded">
+                <!--<form id="mail" method="post" action="sendMail" enctype="application/x-www-form-urlencoded">-->
+                <form id="mail" method="post" action="sendMail" enctype="multipart/form-data">
                     <dl>
                         <dt>To:</dt>
-                        <dd><input type="text" name="to" size=30></dd>
+                        <dd><input type="text" name="to" id="listTo" size=30></dd>
                     </dl>
                     <dl>
                         <dt>Cc:</dt>
-                        <dd><input type="text" name="cc" size=30></dd>
+                        <dd><input type="text" name="cc" id="listCc" size=30></dd>
                     </dl>
                     <dl>
                         <dt>Subject:</dt>
-                        <dd><input type="text" name="subject" size=53></dd>
+                        <dd><input type="text" name="subject" id="subject" size=53></dd>
                     </dl>
                     <dl>
                         <dt>Body:</dt>
-                        <dd><textarea type="text" name="body" cols="40" rows="10"></textarea></dd>
+                        <dd><textarea type="text" name="body" id="body" cols="40" rows="10"></textarea></dd>
                     </dl>
-                    <button type="submit">Send Mail</button>
+                    <dl>
+                        <dt>Attachments type:</dt>
+                        <dd>UrlType <input type="radio" name="type" value="urlType" checked></dd>
+                        <dd>MimeType <input type="radio" name="type" value="mimeType"></dd>
+                    </dl>
+                    <dl>
+                        <dt>Attachments:</dt>
+                        <dd><input type="file" name="file"></dd>
+                    </dl>
+                    <button id="sendMail" type="submit">Send Mail</button>
                 </form>
             </td>
             <td>
-                <div id="error"></div>
+                <div id="result" style="margin-left:20px; width:500px; text-wrap: normal"></div>
             </td>
         </tr>
     </table>
     <p>
+    <table id="mailHist"></table>
+    <button id="reloadBtn">Reload</button>
 </section>
 </body>
 </html>

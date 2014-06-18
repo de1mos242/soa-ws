@@ -9,7 +9,8 @@ import javax.xml.ws.WebFault;
  * User: gkislin
  * Date: 28.01.14
  */
-@WebFault(name = "webStateException")
+@WebFault(name = "webStateException", targetNamespace = "http://web.common.gkislin.github.com/")
+
 public class WebStateException extends Exception {
     private ExceptionType type;
 
